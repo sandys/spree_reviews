@@ -1,7 +1,14 @@
 module SpreeReviews
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      
+#      source_root File.expand_path("../../../../", __FILE__) 
+      def copy_locale
+        Dir.glob(File.join(ReviewsExtension.root, "db", 'sample', '*.{yml,csv}')).each do |resource_file|
+          say_status("copying", "#{resource_file} --->>  db/sample/#{File.basename(resource_file)}", :green)
+          copy_file resource_file, "db/sample/#{File.basename(resource_file)}"
+        end
+      end
+
       def add_migrations
         run 'rake railties:install:migrations FROM=<%= file_name %>'
       end
